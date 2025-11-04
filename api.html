@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API</title>
+    <style>
+        #factsTitle{
+            font-size: 30px;
+        }
+        #more{
+            background-color: rgb(243, 243, 160);
+        }
+    </style>
+</head>
+<body>
+    <h1>Facts about Cats</h1>
+    <div>
+        <label>How many cat facts would you like to know?</label>
+        <input id="numFacts" type="number" min="1" max="10" value="1" />
+        <button id="fetchBtn">Get the Facts</button>
+        <div id="factsContainer"></div>
+        <div id="more">
+            <h3>More About This API</h3>
+            <ul>
+                <li>This is an API that returns random facts about cats and
+                     takes a perameter for the number of facts to return.
+                </li>
+                <li>The documentation for this API is available at 
+                    <a target="_blank" href="https://www.postman.com/micfai/michael-fairchild-s-public-workspace/documentation/dnkbvc3/cat-facts-api">
+                        this link</a>
+                </li>
+                <li>I used the perameter with the key "limit", which tells the API how many facts to return.
+                    I set this using the value inputted by the user.
+                </li>
+                <li>This API would be useful as a widget on a pet shelter 
+                    website so that clients can learn a bit about cats before 
+                    adopting one.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="results"></div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        const btn = document.getElementById("fetchBtn");
+        btn.addEventListener("click", requestFacts);
+
+        function requestFacts(){
+            const limit = document.getElementById("numFacts").value;
+            const url = 'https://catfact.ninja/facts?limit=' + encodeURIComponent(limit);
+            
+            fetch(url)
+                .then (res => res.json())
+                .then (data => {
+                    const facts = Array.isArray(data.data) ? data.data : [];
+                    const container = document.getElementById("factsContainer");
+                    container.innerHTML = "<div id='factsTitle'>Facts: </ br></div>";
+                    facts.forEach((item, i) => container.innerHTML+=`<div><b>#${i + 1}:</b> ${item.fact}</div>`);
+                })
+                .catch (error => console.log(error))
+            }
+    </script>
+</body>
+</html>
